@@ -1,86 +1,67 @@
-/*******************************************************************
+/*
 * COPYRIGHT       : 2025
-* PROJECT         : CSG general libraries
+* PROJECT         : Scene Manager Assignment
 * FILE NAME       : Singleton.cs
-* DESCRIPTION     : Signleton base class that any MonoBehaviour can inherit from
+* DESCRIPTION     : Singleton base class that any MonoBehaviour can inherit from
 *                    
 * REVISION HISTORY:
-* Date            Author                  Comments
+* Date          Author                  Comments
 * ---------------------------------------------------------------------------
-* 2025/02/04     Akram Taghavi-Burris        Created class
-* 
-*
-/******************************************************************/
+* 02.04.2025    Akram Taghavi-Burris    Created script.
+* 02.19.2025    Julia Gaskin            Formatting.
+*/
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace CSG.General {
-
     
-public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
-{
-    //Static instance hold the reference to the Singleton
+public class Singleton<T> : MonoBehaviour where T : MonoBehaviour {
+    // static instance holding Singleton reference
     private static T _instance;
     
-    //Public property to access Singleton instance
+    // public property accessing Singleton instance
     public static T Instance {get{return _instance;}}
     
     [SerializeField]
-    //Is the object persistent between scenes
+    // object persistence between scenes
     private bool _isPersistent = true;
     
     
-    // Awake is called once at instantiation
-    protected virtual void Awake()
-    {
-        //Check for singleton duplication
-        ChekForSingelton();
-    }//end Awake()
+    // AWAKE //
+    protected virtual void Awake() {
+        ChekForSingelton();  // check for singleton duplication
+    }
 
-    void ChekForSingelton()
-    {
-        //If instance of singleton is empty
-        if (_instance == null)
-        {
-            //make this object the instance 
-            _instance = this as T;
-
-            CheckForPresistance();
-        }
-        //Else if this object is not the instance, destroy this object
-        else if (_instance != this)
-        {
+    void ChekForSingelton() {
+        // if instance of singleton is empty
+        if (_instance == null) {
+            _instance = this as T;  // make this object the instance
+            CheckForPersistance();
+        } else if (_instance != this) {
+            // else, destroy this object
             Destroy(this);
         }
         
-        //Log the current instance for debugging purposes
+        // log the current instance for debugging purposes
         Debug.Log(_instance);
-        
-    }//end CheckForSingleton()
+    }
 
-
-    void CheckForPresistance()
-    {
-        if (_isPersistent)
-        {
-            //if a parent object exists
-            if (transform.parent != null)
-            {
-                //detach object from parent
+    // CHECK FOR PERSISTENCE //
+    void CheckForPersistance() {
+        if (_isPersistent) {
+            // if a parent object exists
+            if (transform.parent != null) {
+                // detach object from parent
                 transform.SetParent(null);
                 Debug.Log($"detach {gameObject.name}");
             }
             
-            //Keep object peresistent between scenes
-           DontDestroyOnLoad(_instance);
-           
-        }//end if (isPersistent)
-        
-    }//end CheckForPresistance()
-    
-    
+            // keep object persistent between scenes
+            DontDestroyOnLoad(_instance);
+        }
+    }
+}
 
-}//end Singleton.cs
-
-}//end namespace
+}
