@@ -87,7 +87,7 @@ namespace CSG.Managers {
         }
 
         // LOAD SCENE COROUTINE //
-        private IEnumerator LoadSceneAsync(string sceneName, LoadSceneMode loadMode) {
+        private IEnumerator LoadSceneAsync(string sceneName, LoadSceneMode loadMode = LoadSceneMode.Single) {
             string currentScene = string.Empty;
 
             // check if scene is loading properly
