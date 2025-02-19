@@ -19,24 +19,12 @@ using UnityEngine;
 using CSG.General;
 using UnityEngine.SceneManagement;
 
-/*** GAME STATES ***/
-public enum GameState {
-    MainMenu,
-    Paused,
-    Playing,
-    GameOver,
-    Idle,
-    Restart,
-    QuitGame
-}
-
 namespace CSG.Managers {
 
     /*** SCENE MANAGER CLASS ***/
     public class SceneManager : Singleton<SceneManager> {
 
         /*** public variables ***/
-        public GameState currentState;
         public string[] gameLevels;
 
         /*** private variables ***/
@@ -46,33 +34,10 @@ namespace CSG.Managers {
 
         // START //
         void Start() {
-            // set public variables
-            currentState = GameState.MainMenu;
-
             // set private variables
             gameLevelToLoad = string.Empty;
             gameLevelIndex = -1;
             loadedScenes = new List<string>();
-        }
-
-        // UPDATE //
-        void Update() {
-            ManageGameState();
-        }
-
-        // MANAGE GAME STATE //
-        void ManageGameState() {
-            switch (currentState) {
-                case GameState.MainMenu: break;
-                case GameState.Paused: break;
-                case GameState.Playing: break;
-                case GameState.GameOver: break;
-            }
-        }
-
-        // CHANGE GAME STATE //
-        public void ChangeState(GameState newState) {
-            currentState = newState;
         }
 
         // SCENE CHANGE REQUEST //
