@@ -1,124 +1,146 @@
-/*
+/*******************************************************************
 * COPYRIGHT       : 2025
-* PROJECT         : Scene Manager Assignment
+* PROJECT         : CSG Managers
 * FILE NAME       : GameManager.cs
-* DESCRIPTION     : Manages
+* DESCRIPTION     : Game Manager for managing game essentials.
 *                    
 * REVISION HISTORY:
-* Date          Author              Comments
+* Date            Author                  Comments
 * ---------------------------------------------------------------------------
-* 02.19.25      Julia Gaskin        Created script, all the programming.
-* 02.25.25      Julia Gaskin        Debugging.
-*/
+* 2025/02/04     Akram Taghavi-Burris        Created class
+* 2025/02/10    ""                           Added Restart case
+*
+/******************************************************************/
 
+using System.Collections;
+using System.Collections.Generic;
+using CSG.General;
 using UnityEngine;
-using Unity.VisualScripting;
-using UnityEngine.XR;
-using SceneManager = CSG.Managers.SceneManager;
 
-/*** GAME STATES ***/
-public enum GameState {
-    Default,
-    MainMenu,
-    Paused,
-    Playing,
-    GameOver,
-    Idle,
-    Restart,
-    QuitGame
-}
+namespace CSG.Managers
+{
 
-namespace CSG.Managers {
-    public class GameManager : General.Singleton<GameManager> {
+    public class GameManager : Singleton<GameManager>
+    {
+        [Header("Game State")]
+        //Current state of game 
+        public GameState CurrentState = GameState.Idle;
+
+        //Reference 
+        [Header("Managers")]
+        //Get reference to scene manager
+        public SceneManager SceneManager;
+
+        // Start is called before the first frame update
+        void Start()
+        {
+            // Get the instance to manager
+            SceneManager = SceneManager.Instance;
+            Debug.Log($"Reference to scene manager: {SceneManager}");
+            
+           // ChangeState(GameState.MainMenu);
+           ChangeState(GameState.MainMenu);
+
+        } //end Start()
         
-        /*** public variables ***/
-        public GameState currentState = GameState.Idle;
-        
-        // START //
-        void Start() {
-            // set game state to Main Menu
-            ChangeState(GameState.MainMenu);
-        }
 
-        // UPDATE //
-        void Update() {
-            // only expensive if GS is Main Menu or GameOver bc
-            // SceneManager's OnSceneChangeRequest is expensive
-            ManageGameState();
-        }
+        //QuitGame will exit the game or exit play mode in the editor
+        void QuitGame()
+        {
 
-        // MANAGE GAME STATE //
-        void ManageGameState() {
-            switch (currentState) {
-                case GameState.Default:
-                    currentState = GameState.Idle;
-                    break;
-                    
-                case GameState.MainMenu:
-                    SceneManager.Instance.OnSceneChangeRequest("MainMenu");
-                    break;
-                
-                case GameState.Paused:
-                    break;
-                
-                case GameState.Playing:
-                    break;
-                
-                case GameState.GameOver:
-                    SceneManager.Instance.OnSceneChangeRequest("GameOver");
-                    break;
-                
+#if UNITY_EDITOR
+            UnityEditor.EditorApplication.isPlaying = false;
+#else
+        Application.Quit();
+#endif
+
+        } //end QuitGame()
+
+        //Manage the behaviors for game state changes 
+        void ManageGameState()
+        {
+            switch (CurrentState)
+            {
                 case GameState.Idle:
+                    Debug.Log("Idle");
                     ChangeState(GameState.MainMenu);
+                    break;
+
+                case GameState.MainMenu:
+                    Debug.Log("MainMenu");
+                    SceneManager.OnSceneChangeRequest("MainMenu");
+                    break;
+
+                case GameState.Playing:
+                    Debug.Log("Playing Game");
+                    break;
+
+                case GameState.Paused:
+                    Debug.Log("Paused");
                     break;
                 
                 case GameState.Restart:
-                    SceneManager.Instance.UnloadAllScenes();
+                    Debug.Log("Restart Game");
+                    SceneManager.UnloadAllScenes();
                     ChangeState(GameState.Idle);
                     break;
-                
+
+                case GameState.GameOver:
+                    Debug.Log("Game Over");
+                    SceneManager.OnSceneChangeRequest("GameOver");
+                    break;
+
                 case GameState.QuitGame:
+                    Debug.Log("Quit Game");
                     QuitGame();
                     break;
-            }
-        }
 
-        // CHANGE GAME STATE //
-        public void ChangeState(GameState newState) {
-            currentState = newState;
-            ManageGameState();
-        }
-        
-        // START GAME //
-        
-        // START LEVEL //
-        void StartLevel(string levelName = null) {
-            SceneManager.Instance.GetGameLevel(levelName);
+                default:
+                    Debug.LogWarning("Unknown GameState! Defaulting to Idle.");
+                    CurrentState = GameState.Idle;
+                    break;
+
+            } //end switch (CurrentState)
+
+        } //end ManageGameState
+
+
+        //Start (load) the next game level
+        public void StartLevel(string levelName = null) {
+            SceneManager.GetGameLevel(levelName);
             ChangeState(GameState.Playing);
-        }
+        } //end StartLevel()
         
-        // TOGGLE PAUSE //
-        public void TogglePause() {
-            if (currentState == GameState.Paused) {
+        
+        //Toggles pause behaviors on and off 
+        public void TogglePause()
+        {
+            //Check if current state is Pause
+            if (CurrentState == GameState.Paused) {
                 ChangeState(GameState.Playing);
                 Time.timeScale = 1;
-                SceneManager.Instance.UnloadScene("PauseMenu");
-            } else {
+                SceneManager.UnloadScene("PauseMenu");
+            } else { //change to pause state 
                 ChangeState(GameState.Paused);
                 Time.timeScale = 0;
-                SceneManager.Instance.OnSceneChangeRequest("PauseMenu", true);
-            }
-        }
+                SceneManager.OnSceneChangeRequest("PauseMenu", true);
+                
+            }//end if(CurrentState == GameState.Paused)
+            
+        }//end TogglePause()
         
-        // QUIT GAME //
-        void QuitGame() {
-            
-            #if UNITY_EDITOR
-            UnityEditor.EditorApplication.isPlaying = false;
-            #endif
-            
-            Application.Quit();
-        }
-    }
-    
-}
+
+        //<summary>
+        //Changes the state of the game
+        //</summary>
+        //<param name="newState">Pass the game of the new game state as a parameter.</param>
+        public void ChangeState(GameState newState)
+        {
+            CurrentState = newState;
+            ManageGameState();
+        } //end ChangeState
+
+
+
+    } //end GameManager.cs
+}//end namespace

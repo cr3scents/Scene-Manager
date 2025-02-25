@@ -46,39 +46,29 @@ namespace CSG.Managers {
             LoadSceneMode loadMode;
 
             // if scene is not already loaded
-            if (!loadedScenes.Contains(sceneName)) {
-                if (isAdditive) {
-                    loadMode = LoadSceneMode.Additive;
-                }
-                else {
-                    loadMode = LoadSceneMode.Single;
-                }
+            //if (loadedScenes.Contains(sceneName)) return;
+            loadMode = isAdditive ? LoadSceneMode.Additive : LoadSceneMode.Single;
                 
-                Debug.Log("Calling LoadSceneAsync");
-                StartCoroutine(LoadSceneAsync(sceneName, loadMode));
-            }
+            Debug.Log("Calling LoadSceneAsync");
+            StartCoroutine(LoadSceneAsync(sceneName, loadMode));
         }
 
         // GET NEXT GAME LEVEL //
         public void GetGameLevel(string gameLevelName = null) {
-            if (gameLevelName == null) {
-                gameLevelIndex++;
+            if (gameLevelName == null) gameLevelIndex++;
 
-                // check if index > the number of levels
-                if (gameLevelIndex > gameLevels.Length - 1) {
-                    Debug.Log("gameLevelIndex exceeds length of gameLevels.");
-                }
-                else if (gameLevels.Contains(gameLevelName)) {
-                    gameLevelIndex = Array.IndexOf(gameLevels, gameLevelName);
-                }
-                else {
-                    Debug.Log("gameLevelName could not be found in list of gameLevels. Setting gameLevelIndex to 0.");
-                    gameLevelIndex = 0;
-                }
-
-                gameLevelToLoad = gameLevels[gameLevelIndex];
-                OnSceneChangeRequest(gameLevelToLoad);
+            // check if index > the number of levels
+            if (gameLevelIndex > gameLevels.Length - 1) { 
+                Debug.Log("gameLevelIndex exceeds length of gameLevels.");
+            } else if (gameLevels.Contains(gameLevelName)) {
+                gameLevelIndex = Array.IndexOf(gameLevels, gameLevelName);
+            } else {
+                Debug.Log("gameLevelName could not be found in list of gameLevels. Setting gameLevelIndex to 0.");
+                gameLevelIndex = 0;
             }
+
+            gameLevelToLoad = gameLevels[gameLevelIndex];
+            OnSceneChangeRequest(gameLevelToLoad);
         }
 
         // UNLOAD SCENE //
@@ -108,12 +98,6 @@ namespace CSG.Managers {
             while (!asyncLoad.isDone) {
                 yield return null;
             }
-
-            if (loadMode == LoadSceneMode.Single) {
-                foreach (string scene in loadedScenes) {
-                    UnloadScene(scene);
-                }
-            }
             
             Debug.Log("Successfully loaded scene " + sceneName);
             if (!loadedScenes.Contains(currentScene)) loadedScenes.Add(currentScene);
@@ -123,6 +107,7 @@ namespace CSG.Managers {
         private IEnumerator UnloadSceneAsync(string sceneName) {
 
             // check if scene is unloading properly
+            Debug.Log("Unloading scene " + sceneName);
             AsyncOperation asyncUnload = UnityEngine.SceneManagement.SceneManager.UnloadSceneAsync(sceneName);
             if (asyncUnload == null) {
                 Debug.Log("Error unloading scene.");
