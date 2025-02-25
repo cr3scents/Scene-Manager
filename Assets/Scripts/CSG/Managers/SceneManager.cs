@@ -9,6 +9,7 @@
 * ---------------------------------------------------------------------------
 * 02.13.25      Julia Gaskin        Created script.
 * 02.19.25      Julia Gaskin        Formatting, all the programming.
+* 02.25.25      Julia Gaskin        Debugging.
 */
 
 using System;
@@ -45,14 +46,15 @@ namespace CSG.Managers {
             LoadSceneMode loadMode;
 
             // if scene is not already loaded
-            if (loadedScenes.Contains(sceneName)) {
+            if (!loadedScenes.Contains(sceneName)) {
                 if (isAdditive) {
                     loadMode = LoadSceneMode.Additive;
                 }
                 else {
                     loadMode = LoadSceneMode.Single;
                 }
-
+                
+                Debug.Log("Calling LoadSceneAsync");
                 StartCoroutine(LoadSceneAsync(sceneName, loadMode));
             }
         }
@@ -107,7 +109,14 @@ namespace CSG.Managers {
                 yield return null;
             }
 
-            loadedScenes.Add(currentScene);
+            if (loadMode == LoadSceneMode.Single) {
+                foreach (string scene in loadedScenes) {
+                    UnloadScene(scene);
+                }
+            }
+            
+            Debug.Log("Successfully loaded scene " + sceneName);
+            if (!loadedScenes.Contains(currentScene)) loadedScenes.Add(currentScene);
         }
 
         // UNLOAD SCENE COROUTINE //

@@ -8,11 +8,13 @@
 * Date          Author              Comments
 * ---------------------------------------------------------------------------
 * 02.19.25      Julia Gaskin        Created script, all the programming.
+* 02.25.25      Julia Gaskin        Debugging.
 */
 
 using UnityEngine;
 using Unity.VisualScripting;
 using UnityEngine.XR;
+using SceneManager = CSG.Managers.SceneManager;
 
 /*** GAME STATES ***/
 public enum GameState {
@@ -84,9 +86,10 @@ namespace CSG.Managers {
         // CHANGE GAME STATE //
         public void ChangeState(GameState newState) {
             currentState = newState;
-            Debug.Log("Current state is" + currentState.ToString());
             ManageGameState();
         }
+        
+        // START GAME //
         
         // START LEVEL //
         void StartLevel(string levelName = null) {
