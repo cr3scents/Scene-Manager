@@ -803,11 +803,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 881455743567955733, guid: f99d58c630ed939488fec9ac0fa50f05, type: 3}
       propertyPath: 'gameLevels.Array.data[2]'
-      value: PauseMenu
+      value: Campgrounds
       objectReference: {fileID: 0}
     - target: {fileID: 881455743567955733, guid: f99d58c630ed939488fec9ac0fa50f05, type: 3}
       propertyPath: 'gameLevels.Array.data[3]'
-      value: Campgrounds
+      value: PauseMenu
       objectReference: {fileID: 0}
     - target: {fileID: 881455743567955733, guid: f99d58c630ed939488fec9ac0fa50f05, type: 3}
       propertyPath: 'gameLevels.Array.data[4]'

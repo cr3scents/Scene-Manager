@@ -90,9 +90,9 @@ namespace CSG.Managers {
             }
 
             // if only one scene is running
-            if (loadMode == LoadSceneMode.Single) {
-                currentScene = sceneName;
-            }
+            //if (loadMode == LoadSceneMode.Single) {
+            currentScene = sceneName;
+            //}
 
             // wait for scene to finish loading
             while (!asyncLoad.isDone) {

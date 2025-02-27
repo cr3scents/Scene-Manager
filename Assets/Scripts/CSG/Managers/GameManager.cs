@@ -113,8 +113,7 @@ namespace CSG.Managers
         
         
         //Toggles pause behaviors on and off 
-        public void TogglePause()
-        {
+        public void TogglePause() {
             //Check if current state is Pause
             if (CurrentState == GameState.Paused) {
                 ChangeState(GameState.Playing);
