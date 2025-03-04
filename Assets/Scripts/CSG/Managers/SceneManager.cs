@@ -125,6 +125,9 @@ namespace CSG.Managers {
         // UNLOAD ALL SCENES (called on Restart) //
         public void UnloadAllScenes() {
             loadedScenes.Clear();
+            //foreach (string scene in loadedScenes) {
+                //UnloadScene(scene);
+            //}
             gameLevelIndex = -1;
         }
 

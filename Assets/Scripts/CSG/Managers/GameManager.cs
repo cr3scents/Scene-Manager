@@ -82,7 +82,8 @@ namespace CSG.Managers
                 case GameState.Restart:
                     Debug.Log("Restart Game");
                     SceneManager.UnloadAllScenes();
-                    ChangeState(GameState.Idle);
+                    //ChangeState(GameState.Idle);
+                    SceneManager.OnSceneChangeRequest("MainMenu");
                     //StartLevel("Campgrounds");
                     break;
 
