@@ -83,6 +83,7 @@ namespace CSG.Managers
                     Debug.Log("Restart Game");
                     SceneManager.UnloadAllScenes();
                     ChangeState(GameState.Idle);
+                    //StartLevel("Campgrounds");
                     break;
 
                 case GameState.GameOver:
