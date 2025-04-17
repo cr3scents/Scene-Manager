@@ -1,0 +1,18 @@
+/*
+ * #DATE#
+ * #PRODUCT#
+ * #SCRIPTNAME#.cs
+ * Description...
+ */
+
+using UnityEngine;
+
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
+
+public class #SCRIPTNAME# : MonoBehavior {
+
+    //********** VARIABLES **********//
+    
+}

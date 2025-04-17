@@ -14,9 +14,11 @@ public class ItemLoader : MonoBehaviour {
     public List<ItemData> LoadItems() {
         List<ItemData> items = new List<ItemData>();
         _fileName =GetFilePath();
-
+        
         if (!File.Exists(_filePath)) {
             
         }
+        
+        return null;
     }
 }

@@ -61,10 +61,12 @@ public class DataLoader<T> : MonoBehaviour where T : ScriptableObject {
         T dataEntry = ScriptableObject.CreateInstance<T>();
 
         // 
+        /*
         if (dataEntry is IParsable parsableData) {
             parsableData.Parse(fields);
 
         }
+        */
         
         //#if UNITY_EDITOR
         //string assetDictionary = ??;

@@ -1,0 +1,52 @@
+/*
+ * #DATE#
+ * #PRODUCT#
+ * #SCRIPTNAME#.cs
+ * ScriptableObject for...
+ */
+ 
+using UnityEngine;
+ 
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
+ 
+[CreateAssetMenu(fileName = "#SCRIPTNAME#", menuName = "#SCRIPTNAME#/New #SCRIPTNAME#")]
+public class #SCRIPTNAME# : ScriptableObject, IParsable {
+
+    //********** VARIABLES **********//
+    private bool _isDataSaved = false;
+    
+    public string itemName;
+    [TextArea(3, 10)] public string itemDescription;
+    
+    // PARSE & ASSIGN FIELDS FROM CSV FILE //
+    public void Parse(string[] fields) {
+        _isDataSaved = bool.Parse(fields[0]);
+        itemName = fields[1]; 
+        itemDescription = fields[2];
+    }
+    
+    // ENSURE ASSET NAME == itemName FIELD //
+    private void OnValidate() {
+        if (string.IsNullOrEmpty(itemName)) {
+            itemName = this.name;  // set name to "this" asset name
+        } else {
+        #if UNITY_EDITOR
+            // get path of "this" asset
+            string path = AssetDatabase.GetAssetPath(this);
+              
+            // record file name without the extension
+            string currentName = System.IO.Path.GetFileNameWithoutExtension(path);
+      
+            // if file name != field name
+            if (currentName != itemName) {
+                // rename asset to field name & save
+                AssetDatabase.RenameAsset(path, itemName);
+                AssetDatabase.SaveAssets();
+            }
+        #endif
+        } 
+      }
+
+}

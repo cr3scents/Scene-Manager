@@ -22,13 +22,16 @@ public class DataSaver : MonoBehaviour {
     }
 
     private void CreateNewFile() {
+        /*
         var properties = typeof(T).GetProperties();
+        
 
         List<string> headers = new List<string>();
         foreach (var property in properties) {
             headers.Add(property.Name);
             
         }
+        */
 
     }
 }
