@@ -23,6 +23,7 @@ public class ItemData : ScriptableObject, IParsable {
     [TextArea(3, 10)] public string itemDescription;
     public ItemTypes itemType;
     public Sprite itemIcon;
+    public GameObject itemPrefab;
     public int maxStackSize;
     
     // PARSE & ASSIGN FIELDS FROM CSV FILE //
